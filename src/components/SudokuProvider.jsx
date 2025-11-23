@@ -1,34 +1,49 @@
-import { createContext, useContext, useState } from "react";
-import { commonSudokuBuilder } from "./utils/generator";
-import { Mode } from "../constants/Mode";
+import { createContext, useEffect, useState } from "react";
+import { commonSudokuBuilder } from "../utils/generator";
+import { isValid } from "../utils/validator";
+import { Mode, getModeByDifficulty } from "../constants/Mode";
 
-const sudokuContext = createContext();
+export const SudokuContext = createContext();
 
 export default function SudokuProvider(props) {
   const [mode, setMode] = useState(Mode.EASY.difficulty); // 'easy' or 'normal'
-  const [initialBoard, setInitialBoard] = useState([[]]); // Track immutable cells
-  const [board, setBoard] = useState([[]]); // current board state
+  const [initialBoard, setInitialBoard] = useState([[]]); // immutable cells
+  const [board, setBoard] = useState([[]]);               // current board state
   const [selectedCell, setSelectedCell] = useState(null); // {row, col}
-  const [timer, setTimer] = useState(0);
+  const [incorrectCells, setIncorrectCells] = useState(new Set());
   const [isComplete, setIsComplete] = useState(false);
-
-  const [invalidCells, setInvalidCells] = useState(new Set()); // Set of "row,col" strings
+  const [timer, setTimer] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (isTimerRunning && !isComplete) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning, isComplete]);
+
+  // Initialize board on mount
+  useEffect(() => {
+    createNewGame(mode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Create a new puzzle
   function createNewGame(newmode = mode) {
-    const size =
-      newmode === Mode.EASY.difficulty ? Mode.EASY.size : Mode.NORMAL.size;
-    const board = commonSudokuBuilder(size, newmode);
+    const board = commonSudokuBuilder(newmode);
 
     // Deep copy for initial state
-    const initialBoard = board.map((row) => [...row]);
+    const newInitialBoard = board.map((row) => [...row]);
 
     setBoard(board);
-    setInitialBoardState(initialBoard);
-    setmode(newmode);
+    setInitialBoard(newInitialBoard);
+    setMode(newmode);
     setSelectedCell(null);
-    setInvalidCells(new Set());
+    setIncorrectCells(new Set());
     setIsComplete(false);
     setTimer(0);
     setIsTimerRunning(true);
@@ -39,30 +54,30 @@ export default function SudokuProvider(props) {
     const resetBoard = initialBoard.map((row) => [...row]);
     setBoard(resetBoard);
     setSelectedCell(null);
-    setInvalidCells(new Set());
+    setIncorrectCells(new Set());
     setIsComplete(false);
     setTimer(0);
     setIsTimerRunning(true);
-  }
-
-  function selectCell(row, col) {
-    if (isCellEditable(row, col)) {
-      setSelectedCell({ row, col });
-    }
   }
 
   function isCellEditable(row, col) {
     return initialBoard[row][col] === 0;
   }
 
+  function selectCell(row, col) {
+    // Only select if it's editable and game not complete
+    if (!isComplete && isCellEditable(row, col)) {
+      setSelectedCell({ row, col });
+    }
+  }
+
   function inputValue(row, col, value) {
-    // Check if cell is editable
-    if (!isCellEditable(row, col)) return;
+    // Check if cell is editable and game not complete
+    if (isComplete || !isCellEditable(row, col)) return;
     // Check if value is an integer
     if (!Number.isInteger(value)) return;
 
-    const size = board.length;
-    const maxValue = size;
+    const maxValue = board.length;
 
     // Validate input range
     if (value !== 0 && (value < 1 || value > maxValue)) return;
@@ -70,13 +85,51 @@ export default function SudokuProvider(props) {
     // Create new board with updated value
     const newBoard = board.map((r) => [...r]);
     newBoard[row][col] = value;
-    setBoard(newBoard);
 
-    // Validate the cell and update invalid cells
-    updateInvalidCells(newBoard);
+    // Validate the cell and get incorrect cells
+    const newIncorrectCells = computeIncorrectCells(newBoard, mode);
+    setBoard(newBoard);
+    setIncorrectCells(newIncorrectCells);
 
     // Check if board is complete
     checkCompletion(newBoard);
+  }
+
+  function computeIncorrectCells(currentBoard, difficulty) {
+    const currentMode = getModeByDifficulty(difficulty);
+    const { size, boxHeight, boxWidth } = currentMode;
+    const newIncorrectCells = new Set();
+
+    for (let row = 0; row < size; row++) {
+      for (let col = 0; col < size; col++) {
+        const value = currentBoard[row][col];
+        if (value === 0) continue;
+
+        // Check if this cell violates rules
+        if (!isValid(currentBoard, row, col, value, boxHeight, boxWidth)) {
+          newIncorrectCells.add(`${row},${col}`);
+        }
+      }
+    }
+
+    return newIncorrectCells;
+  }
+
+  function checkCompletion(board) {
+    const size = board.length;
+
+    // Check if all cells are filled
+    for (let row = 0; row < size; row++) {
+      for (let col = 0; col < size; col++) {
+        if (board[row][col] === 0) return;
+      }
+    }
+
+    // Check if there are any invalid cells
+    if (incorrectCells.size === 0) {
+      setIsComplete(true);
+      setIsTimerRunning(false);
+    }
   }
 
   const globalDataAndFunctions = {
@@ -86,19 +139,26 @@ export default function SudokuProvider(props) {
     isCellEditable,
     inputValue,
     mode,
+    setMode,
     board,
+    setBoard,
     initialBoard,
+    setInitialBoard,
     selectedCell,
+    setSelectedCell,
     timer,
+    setTimer,
     isComplete,
-    invalidCells,
+    setIsComplete,
+    incorrectCells,
+    setIncorrectCells,
     isTimerRunning,
-    setIsTimerRunning,  
+    setIsTimerRunning,
   };
 
   return (
-    <sudokuContext.Provider value={globalDataAndFunctions}>
+    <SudokuContext.Provider value={globalDataAndFunctions}>
       {props.children}
-    </sudokuContext.Provider>
+    </SudokuContext.Provider>
   );
 }
