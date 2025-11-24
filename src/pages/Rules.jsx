@@ -1,4 +1,3 @@
-// src/pages/Rules.jsx
 import Layout from "../components/Layout.jsx";
 import "./Rules.css";
 
@@ -9,7 +8,7 @@ export default function Rules() {
         <h3>General Rules</h3>
         <ol className="rules-list">
           <li>
-            Fill every row and column with the correct numbers (1–9 for 9×9, 1–6
+            Fill every row and column with the correct numbers (1-9 for 9×9, 1-6
             for 6×6).
           </li>
           <li>
