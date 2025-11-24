@@ -1,119 +1,110 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { SudokuContext } from "../components/SudokuProvider";
 import SudokuBoard from "../components/SudokuBoard";
-import Timer from "../components/Timer";
 import { Mode } from "../constants/Mode";
 import "./SudokuGame.css";
 
 export default function SudokuGame() {
+  const { difficulty } = useParams();
+  const {
+    createNewGame,
+    resetBoard,
+    inputValue,
+    selectedCell,
+    timer,
+    isComplete,
+    mode,
+    board,
+  } = useContext(SudokuContext);
+
+  useEffect(() => {
+    if (difficulty && difficulty !== mode) {
+      createNewGame(difficulty);
+    }
+  }, [difficulty, mode, createNewGame]);
+
+  const maxValue = board.length || 9;
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  function handleNumberClick(num) {
+    if (selectedCell && !isComplete) {
+      inputValue(selectedCell.row, selectedCell.col, num);
+    }
+  }
+
+  function handleClear() {
+    if (selectedCell && !isComplete) {
+      inputValue(selectedCell.row, selectedCell.col, 0);
+    }
+  }
+
+  const numberButtons = [];
+  for (let i = 1; i <= maxValue; i++) {
+    numberButtons.push(
+      <button
+        key={i}
+        className="numberButton"
+        onClick={() => handleNumberClick(i)}
+        disabled={isComplete}
+      >
+        {i}
+      </button>
+    );
+  }
 
   return (
-        <h1>Welcome to Lucy's Sudoku</h1>
+    <div className="sudokuGame">
+      <h1>Sudoku</h1>
+
+      <div className="timer">Time: {formatTime(timer)}</div>
+
+      {isComplete && (
+        <div className="congratulations">
+          🎉 Congratulations! You solved the puzzle! 🎉
+        </div>
+      )}
+
+      <div className="modeSelector">
+        <label>Difficulty: </label>
+        <select
+          value={mode}
+          onChange={(e) => createNewGame(e.target.value)}
+          disabled={isComplete}
+        >
+          <option value={Mode.EASY.difficulty}>Easy (6x6)</option>
+          <option value={Mode.NORMAL.difficulty}>Normal (9x9)</option>
+        </select>
+      </div>
+
+      <SudokuBoard />
+
+      <div className="numberPad">
+        {numberButtons}
+        <button
+          className="numberButton clearButton"
+          onClick={handleClear}
+          disabled={isComplete}
+        >
+          Clear
+        </button>
+      </div>
+
+      <div className="gameControls">
+        <button className="controlButton" onClick={() => createNewGame(mode)}>
+          New Game
+        </button>
+        <button className="controlButton" onClick={resetBoard}>
+          Reset
+        </button>
+      </div>
+    </div>
   );
-  // const {
-  //   createNewGame,
-  //   resetBoard,
-  //   mode,
-  //   isComplete,
-  //   inputValue,
-  //   selectedCell,
-  // } = useContext(SudokuContext);
-
-  // // Handle number input from keyboard
-  // const handleKeyDown = (e) => {
-  //   if (!selectedCell || isComplete) return;
-
-  //   const key = e.key;
-    
-  //   // Handle number input
-  //   if (key >= "1" && key <= "9") {
-  //     const num = parseInt(key);
-  //     const maxValue = mode === Mode.EASY.difficulty ? 6 : 9;
-      
-  //     if (num <= maxValue) {
-  //       inputValue(selectedCell.row, selectedCell.col, num);
-  //     }
-  //   }
-    
-  //   // Handle delete/backspace
-  //   if (key === "Backspace" || key === "Delete" || key === "0") {
-  //     inputValue(selectedCell.row, selectedCell.col, 0);
-  //   }
-  // };
-
-  // // Handle difficulty change
-  // const handleModeChange = (newMode) => {
-  //   createNewGame(newMode);
-  // };
-
-  // return (
-  //   <div className="sudoku-game" onKeyDown={handleKeyDown} tabIndex={0}>
-  //     <div className="game-header">
-  //       <h1>Sudoku</h1>
-  //       <p className="game-subtitle">Challenge your logic and problem-solving skills</p>
-  //     </div>
-
-  //     {/* Timer Component */}
-  //     <Timer />
-
-  //     {/* Difficulty Mode Selection */}
-  //     <div className="mode-section">
-  //       <h2>Difficulty</h2>
-  //       <div className="mode-buttons">
-  //         <button
-  //           className={`mode-btn ${mode === Mode.EASY.difficulty ? "active" : ""}`}
-  //           onClick={() => handleModeChange(Mode.EASY.difficulty)}
-  //           disabled={isComplete}
-  //         >
-  //           Easy (6x6)
-  //         </button>
-  //         <button
-  //           className={`mode-btn ${mode === Mode.NORMAL.difficulty ? "active" : ""}`}
-  //           onClick={() => handleModeChange(Mode.NORMAL.difficulty)}
-  //           disabled={isComplete}
-  //         >
-  //           Normal (9x9)
-  //         </button>
-  //       </div>
-  //     </div>
-
-  //     {/* Completion Message */}
-  //     {isComplete && (
-  //       <div className="completion-message">
-  //         <h2>🎉 Congratulations! 🎉</h2>
-  //         <p>You've successfully completed the puzzle!</p>
-  //       </div>
-  //     )}
-
-  //     {/* Game Board */}
-  //     <div className="board-container">
-  //       <SudokuBoard />
-  //     </div>
-
-  //     {/* Instructions */}
-  //     <div className="instructions">
-  //       <h3>How to Play</h3>
-  //       <ul>
-  //         <li>Click on an empty cell to select it</li>
-  //         <li>Type a number (1-{mode === Mode.EASY.difficulty ? "6" : "9"}) to fill the cell</li>
-  //         <li>Press Backspace or Delete to clear a cell</li>
-  //         <li>Fill all cells following Sudoku rules</li>
-  //         <li>Red borders indicate rule violations</li>
-  //       </ul>
-  //     </div>
-
-  //     {/* Control Buttons */}
-  //     <div className="controls-section">
-  //       <h2>Options</h2>
-  //       <div className="control-buttons">
-  //         <button className="control-btn reset-btn" onClick={resetBoard}>
-  //           Reset
-  //         </button>
-  //         <button className="control-btn new-game-btn" onClick={() => createNewGame(mode)}>
-  //           New Game
-  //         </button>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 }

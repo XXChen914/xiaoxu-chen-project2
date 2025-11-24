@@ -107,6 +107,7 @@ export default function SudokuProvider(props) {
     for (let row = 0; row < size; row++) {
       for (let col = 0; col < size; col++) {
         const value = currentBoard[row][col];
+        if (initialBoard[row][col] !== 0) continue; // Skip immutable cells
         if (value === 0) continue;
 
         // Check if this cell violates rules
@@ -144,21 +145,13 @@ export default function SudokuProvider(props) {
     isCellIncorrect,
     inputValue,
     mode,
-    setMode,
     board,
-    setBoard,
     initialBoard,
-    setInitialBoard,
     selectedCell,
-    setSelectedCell,
     timer,
-    setTimer,
     isComplete,
-    setIsComplete,
     incorrectCells,
-    setIncorrectCells,
     isTimerRunning,
-    setIsTimerRunning,
   };
 
   return (

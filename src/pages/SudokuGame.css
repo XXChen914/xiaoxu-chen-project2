@@ -1,5 +1,138 @@
-/* ====== Game design ====== */
-.game-container {
+
+.sudokuGame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.sudokuGame h1 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.timer {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #0066cc;
+}
+
+.congratulations {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #28a745;
+  background-color: #d4edda;
+  border: 2px solid #28a745;
+  border-radius: 8px;
+  padding: 15px 25px;
+  margin-bottom: 15px;
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.02);
+  }
+}
+
+.modeSelector {
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+.modeSelector select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.numberPad {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  max-width: 400px;
+}
+
+.numberButton {
+  width: 45px;
+  height: 45px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: 2px solid #0066cc;
+  background-color: #fff;
+  color: #0066cc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.numberButton:hover:not(:disabled) {
+  background-color: #0066cc;
+  color: #fff;
+}
+
+.numberButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.clearButton {
+  width: auto;
+  padding: 0 15px;
+  background-color: #f8f8f8;
+  border-color: #999;
+  color: #666;
+}
+
+.clearButton:hover:not(:disabled) {
+  background-color: #999;
+  color: #fff;
+}
+
+.gameControls {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.controlButton {
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.controlButton:first-child {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.controlButton:first-child:hover {
+  background-color: #218838;
+}
+
+.controlButton:last-child {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.controlButton:last-child:hover {
+  background-color: #c82333;
+}
+/* .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,4 +165,4 @@
 
 .cta-button:hover {
   background: #f25278;
-}
+} */
