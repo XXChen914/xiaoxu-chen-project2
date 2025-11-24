@@ -64,6 +64,10 @@ export default function SudokuProvider(props) {
     return initialBoard[row][col] === 0;
   }
 
+  function isCellIncorrect(row, col) {
+    return incorrectCells.has(`${row},${col}`);
+  }
+
   function selectCell(row, col) {
     // Only select if it's editable and game not complete
     if (!isComplete && isCellEditable(row, col)) {
@@ -137,6 +141,7 @@ export default function SudokuProvider(props) {
     resetBoard,
     selectCell,
     isCellEditable,
+    isCellIncorrect,
     inputValue,
     mode,
     setMode,
