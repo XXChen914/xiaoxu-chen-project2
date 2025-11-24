@@ -1,37 +1,47 @@
-
-.sudokuGame {
+.sudoku-game {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: 20px 16px 30px;
   font-family: Arial, sans-serif;
 }
 
-.sudokuGame h1 {
-  margin-bottom: 10px;
-  color: #333;
+.sudoku-game__header {
+  text-align: center;
 }
 
-.timer {
-  font-size: 1.5rem;
+.sudoku-game__title {
+  margin: 0 0 4px;
+  color: #333;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+}
+
+.sudoku-game__subtitle {
+  margin: 0 0 10px;
+  color: #666;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+.sudoku-game__timer {
+  font-size: 1.4rem;
   font-weight: bold;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
   color: #0066cc;
 }
 
-.congratulations {
-  font-size: 1.3rem;
+.sudoku-game__congratulations {
+  font-size: 1.1rem;
   font-weight: bold;
   color: #28a745;
   background-color: #d4edda;
   border: 2px solid #28a745;
   border-radius: 8px;
-  padding: 15px 25px;
-  margin-bottom: 15px;
-  animation: pulse 1s ease-in-out infinite alternate;
+  padding: 10px 20px;
+  margin: 8px auto 0;
+  animation: sudoku-game-pulse 1s ease-in-out infinite alternate;
 }
 
-@keyframes pulse {
+@keyframes sudoku-game-pulse {
   from {
     transform: scale(1);
   }
@@ -40,53 +50,47 @@
   }
 }
 
-.modeSelector {
-  margin-bottom: 15px;
-  font-size: 1rem;
+.sudoku-game__main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
 }
 
-.modeSelector select {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  margin-left: 8px;
-  cursor: pointer;
-}
-
-.numberPad {
+/* Number pad */
+.sudoku-game__number-pad {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 18px;
   max-width: 400px;
 }
 
-.numberButton {
+.sudoku-game__number-button {
   width: 45px;
   height: 45px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: bold;
   border: 2px solid #0066cc;
   background-color: #fff;
   color: #0066cc;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.15s ease;
 }
 
-.numberButton:hover:not(:disabled) {
+.sudoku-game__number-button:hover:not(:disabled) {
   background-color: #0066cc;
   color: #fff;
 }
 
-.numberButton:disabled {
+.sudoku-game__number-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.clearButton {
+.sudoku-game__number-button--clear {
   width: auto;
   padding: 0 15px;
   background-color: #f8f8f8;
@@ -94,75 +98,61 @@
   color: #666;
 }
 
-.clearButton:hover:not(:disabled) {
+.sudoku-game__number-button--clear:hover:not(:disabled) {
   background-color: #999;
   color: #fff;
 }
 
-.gameControls {
+/* Controls */
+.sudoku-game__controls {
   display: flex;
   gap: 15px;
   margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.controlButton {
-  padding: 12px 25px;
+.sudoku-game__control-button {
+  padding: 10px 22px;
   font-size: 1rem;
   font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.15s;
-}
-
-.controlButton:first-child {
-  background-color: #28a745;
+  transition: all 0.15s ease;
   color: #fff;
 }
 
-.controlButton:first-child:hover {
+.sudoku-game__control-button--new {
+  background-color: #28a745;
+}
+
+.sudoku-game__control-button--new:hover {
   background-color: #218838;
 }
 
-.controlButton:last-child {
+.sudoku-game__control-button--reset {
   background-color: #dc3545;
-  color: #fff;
 }
 
-.controlButton:last-child:hover {
+.sudoku-game__control-button--reset:hover {
   background-color: #c82333;
 }
-/* .game-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
 
-.game-section {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
+/* Small screens */
+@media (max-width: 480px) {
+  .sudoku-game {
+    padding: 16px 10px 24px;
+  }
 
-.game-controls {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+  .sudoku-game__number-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
 
-.cta-button {
-  background: #fb6f92;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+  .sudoku-game__control-button {
+    padding: 9px 18px;
+    font-size: 0.95rem;
+  }
 }
-
-.cta-button:hover {
-  background: #f25278;
-} */
