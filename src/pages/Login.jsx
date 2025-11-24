@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import AuthLayout from "../components/AuthLayout.jsx";
+import Layout from "../components/Layout.jsx";
 import FormField from "../components/FormField.jsx";
 
 export default function Login() {
@@ -15,7 +15,7 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout title="Log in" subtitle="Welcome Back!">
+    <Layout title="Log in" subtitle="Welcome Back!">
       <form className="form" method="post" action="#" onSubmit={handleSubmit}>
         <FormField
           id="username"
@@ -50,6 +50,6 @@ export default function Login() {
           </span>
         </div>
       </form>
-    </AuthLayout>
+    </Layout>
   );
 }

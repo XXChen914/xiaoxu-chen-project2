@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import AuthLayout from "../components/AuthLayout.jsx";
+import Layout from "../components/Layout.jsx";
 import FormField from "../components/FormField.jsx";
 
 export default function Register() {
@@ -15,7 +15,7 @@ export default function Register() {
   };
 
   return (
-    <AuthLayout
+    <Layout
       title="Create an account"
       subtitle={
         <>
@@ -61,6 +61,6 @@ export default function Register() {
           </button>
         </div>
       </form>
-    </AuthLayout>
+    </Layout>
   );
 }

@@ -1,4 +1,4 @@
-export default function AuthLayout({ title, subtitle, children }) {
+export default function Layout({ title, subtitle, children }) {
   return (
     <main className="container">
       <header className="page-header">
