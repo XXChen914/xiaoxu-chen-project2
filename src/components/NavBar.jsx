@@ -13,8 +13,14 @@ export default function NavBar() {
         <li>
           <NavLink to={"/"}>Home</NavLink>
         </li>
-                <li>
+        <li>
           <NavLink to={"/games"}>Selection</NavLink>
+        </li>
+                        <li>
+          <NavLink to="/games/normal">Normal Game</NavLink>
+        </li>
+                <li>
+          <NavLink to="/games/easy">Easy Game</NavLink>
         </li>
         <li>
           <NavLink to={"/rules"}>Rules</NavLink>
@@ -32,5 +38,3 @@ export default function NavBar() {
     </nav>
   );
 }
-
-
