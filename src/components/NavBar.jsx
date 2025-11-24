@@ -16,10 +16,10 @@ export default function NavBar() {
         <li>
           <NavLink to={"/games"}>Selection</NavLink>
         </li>
-                        <li>
+        <li>
           <NavLink to="/games/normal">Normal Game</NavLink>
         </li>
-                <li>
+        <li>
           <NavLink to="/games/easy">Easy Game</NavLink>
         </li>
         <li>

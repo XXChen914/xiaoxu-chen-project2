@@ -1,6 +1,6 @@
 export function isValid(board, row, col, val, boxHeight, boxWidth) {
   const size = board.length;
-  if (val === 0) return true; 
+  if (val === 0) return true;
 
   // Check row
   for (let x = 0; x < size; x++) {
@@ -15,7 +15,7 @@ export function isValid(board, row, col, val, boxHeight, boxWidth) {
   // Check box
   const boxR = Math.floor(row / boxHeight) * boxHeight;
   const boxC = Math.floor(col / boxWidth) * boxWidth;
-  
+
   for (let i = 0; i < boxHeight; i++) {
     for (let j = 0; j < boxWidth; j++) {
       const currentRow = boxR + i;
@@ -27,5 +27,6 @@ export function isValid(board, row, col, val, boxHeight, boxWidth) {
         return false;
     }
   }
+
   return true;
 }

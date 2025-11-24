@@ -4,7 +4,8 @@ export const Mode = Object.freeze({
     size: 6,
     boxHeight: 2,
     boxWidth: 3,
-    keepCells: 18,
+    keepCellsMin: 18,
+    keepCellsMax: 18,
   },
 
   NORMAL: {
