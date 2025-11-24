@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { SudokuContext } from "../components/SudokuProvider";
-import SudokuBoard from "../components/SudokuBoard";
+import SudokuBoard from "../components/SudokuBoard"; 
 import { Mode, getModeByDifficulty } from "../constants/Mode";
 import "./SudokuGame.css";
 
@@ -15,7 +15,6 @@ export default function SudokuGame() {
     timer,
     isComplete,
     mode,
-    board,
   } = useContext(SudokuContext);
 
   // Sync URL difficulty with context mode
