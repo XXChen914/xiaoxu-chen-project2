@@ -1,6 +1,6 @@
 # Welcome to [Lucy's Sudoku](https://xiaoxu-chen-project2.onrender.com)!
 ## Walkhthrough Video
-See [Video]() here
+See [Video](https://youtu.be/2bj2p14jYkI) here
 
 ## Render Link
 See my [web in Render](https://xiaoxu-chen-project2.onrender.com)
